@@ -137,18 +137,19 @@ class NPC {
 }
 
 function preload() {
-  ghostStill     = loadImage("assets/ghostStill.png");
-  ghostMove      = loadImage("assets/ghostMove.png");
+  ghostStill = loadImage("assets/ghostStill.png");
+  ghostMove = loadImage("assets/ghostMove.png");
   ghostScareSheet = loadImage("assets/ScareGhost.png");
-  scareSound     = loadSound("assets/scaryghost.mp3");
+  scareSound = loadSound("assets/scaryghost.mp3");
 
   npcUp = loadImage("assets/npcUp.png");
   npcRight = loadImage("assets/npcRight.png");
   npcDown = loadImage("assets/npcDown.png");
   npcLeft = loadImage("assets/npcLeft.png");
 
-  menuBg          = loadImage("assets/cemetery_bg.png");
-  uiButtons       = loadImage("assets/buttons free.png"); 
+  menuBg = loadImage("assets/cemetery_bg.png");
+  cityBg = loadImage("assets/city_bg.png");
+  uiButtons = loadImage("assets/buttons free.png"); 
 }
 
 function setup() {
@@ -178,7 +179,7 @@ function draw() {
     drawIntroScreen();
     return;
   }
-  
+
   drawBG();
 
   if (!npcScared) {
@@ -271,7 +272,7 @@ function drawScareGhost(bob) {
 }
 
 function drawBG() {
-  image(menuBg, width / 2, height / 2, width, height);
+  image(cityBg, width / 2, height / 2, width, height);
   noStroke();
   fill(0, 0, 0, 110);
   rect(0, 0, width, height);
