@@ -13,7 +13,13 @@ let speed = 3;
 let isMoving = false;
 let isScaring = false;
 
+// Progress system variables
+let soulsCollected = 0;
+let ghostPoints = 0;
+const SOULS_NEEDED = 5;
+const MAX_GHOST_POINTS = 20;
 
+// Key codes
 const KEY_W = 87;
 const KEY_A = 65;
 const KEY_S = 83;
@@ -59,6 +65,7 @@ function draw() {
 
   moveGhost();
   drawGhost();
+  drawProgressUI();
 }
 
 function moveGhost() {
@@ -130,6 +137,33 @@ function drawScareGhost(bob) {
     SCARE_FRAME_SIZE,        
     SCARE_FRAME_SIZE          
   );
+}
+
+// Progression meters UI
+function drawProgressUI() {
+  // Soul meter background
+  fill(100, 100, 255, 150);
+  rect(20, 20, 200, 20);
+
+  // Soul meter fill
+  fill(0, 0, 255);
+  const soulWidth = map(soulsCollected, 0, SOULS_NEEDED, 0, 200);
+  rect(20, 20, soulWidth, 20);
+
+  // Ghost progression meter background
+  fill(100, 255, 100, 150);
+  rect(20, 50, 200, 20);
+
+  // Ghost progression meter fill
+  fill(0, 255, 0);
+  const ghostWidth = map(ghostPoints, 0, MAX_GHOST_POINTS, 0, 200);
+  rect(20, 50, ghostWidth, 20);
+
+  // Labels
+  fill(255);
+  textSize(14);
+  text(`Souls: ${soulsCollected}/${SOULS_NEEDED}`, 25, 35);
+  text(`Ghost Points: ${ghostPoints} / ${MAX_GHOST_POINTS}`, 25, 65);
 }
 
 //scare button 
