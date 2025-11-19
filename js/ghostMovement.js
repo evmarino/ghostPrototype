@@ -13,6 +13,9 @@ let speed = 3;
 let isMoving = false;
 let isScaring = false;
 
+let npc;
+let npcScared = false;
+
 // Progress system variables
 let soulsCollected = 0;
 let ghostPoints = 0;
@@ -40,12 +43,108 @@ let scareFrameTimer = 0;
 let scareFrameDelay = 4; 
 let scareScale = 10; 
 
+class NPC {
+  constructor(x, y, speed=100) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+
+    // dirs
+    // 0 - move up
+    // 1 - move right
+    // 2 - move down
+    // 3 - move left
+    this.dir = 0;
+
+    // states
+    // 0 - stall
+    // 1 - move
+    this.state = 0;
+    this.stateTime = 0;
+  }
+  
+  move() {
+    const dt = deltaTime / 1000.0;
+    
+    this.stateTime -= dt;
+
+    if (this.stateTime <= 0) {
+      this.dir = int(random(0, 4));
+      this.state = int(random(0, 2));
+      this.stateTime = random(1, 3);
+    }
+
+    switch (this.state) {
+      case 0:
+        // do nothing
+        break;
+      case 1:
+        switch (this.dir) {
+          case 0:
+            if (this.y < 0) {
+              this.stateTime = 0;
+              break;
+            }
+            this.y -= this.speed * dt;
+            break;
+          case 1:
+            if (this.x > width) {
+              this.stateTime = 0;
+              break;
+            }
+            this.x += this.speed * dt;
+            break;
+          case 2:
+            if (this.y > height) {
+              this.stateTime = 0;
+              break;
+            }
+            this.y += this.speed * dt;
+            break;
+          case 3:
+            if (this.x < 0) {
+              this.stateTime = 0;
+              break;
+            }
+            this.x -= this.speed * dt;
+            break;
+        }
+        break;
+    }
+  }
+
+  draw() {
+    let img;
+
+    switch (this.dir) {
+      case 0:
+        img = npcUp;
+        break;
+      case 1:
+        img = npcRight;
+        break;
+      case 2:
+        img = npcDown;
+        break;
+      case 3:
+        img = npcLeft;
+        break;
+    }
+    
+    image(img, this.x, this.y);
+  }
+}
 
 function preload() {
   ghostStill     = loadImage("assets/ghostStill.png");
   ghostMove      = loadImage("assets/ghostMove.png");
   ghostScareSheet = loadImage("assets/ScareGhost.png");
-  scareSound     = loadSound("assets/scaryghost.mp3"); 
+  scareSound     = loadSound("assets/scaryghost.mp3");
+
+  npcUp = loadImage("assets/npcUp.png");
+  npcRight = loadImage("assets/npcRight.png");
+  npcDown = loadImage("assets/npcDown.png");
+  npcLeft = loadImage("assets/npcLeft.png");
 }
 
 function setup() {
@@ -58,13 +157,21 @@ function setup() {
   if (scareSound) {
     scareSound.setVolume(0.3);  // volume noise levels
   }
+
+  npc = new NPC(width/2, height/2);
 }
 
 function draw() {
   background(0);
 
+  if (!npcScared) {
+    npc.move();
+    npc.draw();
+  }
+
   moveGhost();
   drawGhost();
+  
   drawProgressUI();
 }
 
@@ -175,6 +282,41 @@ function keyPressed() {
 
     if (!scareSound.isPlaying()) {
       scareSound.play();
+    }
+
+    // TODO: loop over npcs if we have multiple for this check, apply to closest npc
+    let rdx = npc.x - ghostX;
+    let rdy = npc.y - ghostY;
+    
+    let dx = rdx / abs(rdx);
+    let dy = rdy / abs(rdy);
+
+    let dirX;
+    let dirY;
+
+    switch (npc.dir) {
+      case 0:
+        dirX = 0;
+        dirY = -1;
+        break;
+      case 1:
+        dirX = 1;
+        dirY = 0;
+        break;
+      case 2:
+        dirX = 0;
+        dirY = 1;
+        break;
+      case 3:
+        dirX = -1;
+        dirY = 0;
+        break;
+    }
+
+    console.log(dx, dy, dirX, dirY);
+
+    if (abs(dx + dirX) == 2 || abs(dy + dirY) == 2) {
+      npcScared = true;
     }
   }
 }
