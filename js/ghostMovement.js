@@ -360,6 +360,11 @@ function keyPressed() {
 
     if (abs(dx + dirX) == 2 || abs(dy + dirY) == 2) {
       npcScared = true;
+
+      if (soulsCollected < SOULS_NEEDED) {
+        soulsCollected++;
+        ghostPoints += 4; 
+      }
     }
   }
 }
