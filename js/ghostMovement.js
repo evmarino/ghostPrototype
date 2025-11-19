@@ -1,6 +1,7 @@
+//ghostMovement (gameplay js)
+
 
 //initializations
-
 let ghostStill;
 let ghostMove;
 let ghostScareSheet;  
@@ -145,10 +146,14 @@ function preload() {
   npcRight = loadImage("assets/npcRight.png");
   npcDown = loadImage("assets/npcDown.png");
   npcLeft = loadImage("assets/npcLeft.png");
+
+  menuBg          = loadImage("assets/cemetery_bg.png");
+  uiButtons       = loadImage("assets/buttons free.png"); 
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight); 
+  
   imageMode(CENTER);
 
   ghostX = width / 2;
@@ -159,9 +164,20 @@ function setup() {
   }
 
   npc = new NPC(width/2, height/2);
+  setupMenu();
 }
 
 function draw() {
+  if (GAME_STATE === "MENU") {
+    drawMenu();
+    return;
+  }
+
+  if (GAME_STATE === "INTRO") {
+    drawIntroScreen();
+    return;
+  }
+
   background(0);
 
   if (!npcScared) {
@@ -179,7 +195,7 @@ function moveGhost() {
   let dx = 0;
   let dy = 0;
 
-  
+
   if (keyIsDown(LEFT_ARROW) || keyIsDown(KEY_A))  dx -= speed;
   if (keyIsDown(RIGHT_ARROW) || keyIsDown(KEY_D)) dx += speed;
   if (keyIsDown(UP_ARROW) || keyIsDown(KEY_W))    dy -= speed;
@@ -192,6 +208,7 @@ function moveGhost() {
 
   ghostX = constrain(ghostX, 0, width);
   ghostY = constrain(ghostY, 0, height);
+
 }
 
 function drawGhost() {
@@ -201,6 +218,12 @@ function drawGhost() {
     drawScareGhost(bob);
   } else {
     drawNormalGhost(bob);
+  }
+}
+
+function mousePressed() {
+  if (GAME_STATE === "MENU") {
+    menuMousePressed();
   }
 }
 
@@ -275,6 +298,15 @@ function drawProgressUI() {
 
 //scare button 
 function keyPressed() {
+    if (GAME_STATE === "INTRO") {
+    handleIntroKeyPressed();
+    return;
+  }
+
+  if (GAME_STATE !== "GAME") {
+    return;
+  }
+
   if (keyCode === KEY_SPACE) {
     isScaring = true;
     scareFrameIndex = 0;    
@@ -322,8 +354,11 @@ function keyPressed() {
 }
 
 function keyReleased() {
+  if (GAME_STATE !== "GAME") return;
+
   if (keyCode === KEY_SPACE) {
     isScaring = false;
-     scareSound.stop();
+    scareSound.stop();
   }
 }
+
