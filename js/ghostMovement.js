@@ -303,8 +303,8 @@ function drawProgressUI() {
   // Labels
   fill(255);
   textSize(14);
-  text(`Souls: ${soulsCollected}/${SOULS_NEEDED}`, 25, 35);
-  text(`Ghost Points: ${ghostPoints} / ${MAX_GHOST_POINTS}`, 25, 65);
+  text(`Souls: ${soulsCollected}/${SOULS_NEEDED}`, 53, 24);
+  text(`Ghost Points: ${ghostPoints} / ${MAX_GHOST_POINTS}`, 83, 53);
 }
 
 //scare button 
