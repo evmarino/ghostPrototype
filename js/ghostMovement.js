@@ -165,6 +165,7 @@ function setup() {
 
   npc = new NPC(width/2, height/2);
   setupMenu();
+  drawBG();
 }
 
 function draw() {
@@ -177,8 +178,8 @@ function draw() {
     drawIntroScreen();
     return;
   }
-
-  background(0);
+  
+  drawBG();
 
   if (!npcScared) {
     npc.move();
@@ -269,6 +270,16 @@ function drawScareGhost(bob) {
   );
 }
 
+function drawBG() {
+  image(menuBg, width / 2, height / 2, width, height);
+  noStroke();
+  fill(0, 0, 0, 110);
+  rect(0, 0, width, height);
+}
+
+function menuMousePressed() {
+  playBtn.click();
+}
 // Progression meters UI
 function drawProgressUI() {
   // Soul meter background

@@ -62,7 +62,7 @@ function drawIntroScreen() {
 
  
   fill(35, 25, 15);
-  textSize(16);
+  textSize(14);
 
   const bodyTop = textTop + 48;
   const bodyWidth = noteW * 0.82;
