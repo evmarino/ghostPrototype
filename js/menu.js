@@ -62,6 +62,7 @@ class UIButton {
   }
 }
 function setupMenu() {
+  bgMusic.play(); 
   const cx = width / 2;
   const cy = height / 2;
 

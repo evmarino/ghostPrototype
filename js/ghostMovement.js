@@ -154,8 +154,8 @@ function preload() {
   bgMusic = loadSound("assets/bgMusic.mp3");
 }
 
+
 function setup() {
-  bgMusic.play();
   createCanvas(windowWidth, windowHeight); 
   
   imageMode(CENTER);
