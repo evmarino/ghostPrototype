@@ -14,8 +14,7 @@ let speed = 3;
 let isMoving = false;
 let isScaring = false;
 
-let npc;
-let npcScared = false;
+let npcs = [];
 
 // Progress system variables
 let soulsCollected = 0;
@@ -167,7 +166,13 @@ function setup() {
     scareSound.setVolume(0.3);  // volume noise levels
   }
 
-  npc = new NPC(width/2, height/2);
+  for (let i = 0; i < 5; i++) {
+    let rx = random(50, width - 50);
+    let ry = random(50, height - 50);
+
+    npcs.push(new NPC(rx, ry));
+  }
+
   setupMenu();
   drawBG();
 }
@@ -185,7 +190,7 @@ function draw() {
 
   drawBG();
 
-  if (!npcScared) {
+  for (const npc of npcs) {
     npc.move();
     npc.draw();
   }
@@ -322,7 +327,7 @@ function keyPressed() {
     return;
   }
 
-  if (keyCode === KEY_SPACE) {
+  if (keyCode === KEY_SPACE && !isScaring) {
     isScaring = true;
     scareFrameIndex = 0;    
     scareFrameTimer = 0;
@@ -331,15 +336,25 @@ function keyPressed() {
       scareSound.play();
     }
 
+    let target, targetDist = -1;
+    for (let i = 0; i < npcs.length; i++) {
+      const npc = npcs[i];
+      let distance = dist(ghostX, ghostY, npc.x, npc.y);
+
+      if (targetDist == -1 || distance <= targetDist) {
+        target = i;
+        targetDist = distance;
+      }
+    }
+
     // Check if NPC is in scare range
-    let distance = dist(ghostX, ghostY, npc.x, npc.y);
+    const npc = npcs[target];
     let scareRange = 150;
 
-    if (distance < scareRange && !npcScared) {
-      // TODO: loop over npcs if we have multiple for this check, apply to closest npc
+    if (targetDist < scareRange) {
       let rdx = npc.x - ghostX;
       let rdy = npc.y - ghostY;
-    
+  
       let dx = rdx / abs(rdx);
       let dy = rdy / abs(rdy);
 
@@ -365,14 +380,13 @@ function keyPressed() {
           break;
       }
 
-      console.log(dx, dy, dirX, dirY);
+      // console.log(dx, dy, dirX, dirY);
 
       if (abs(dx + dirX) == 2 || abs(dy + dirY) == 2) {
-        npcScared = true;
-
         if (soulsCollected < SOULS_NEEDED) {
           soulsCollected++;
-          ghostPoints += 4; 
+          ghostPoints += 4;
+          npcs.splice(target, 1);
         }
       }
     }
