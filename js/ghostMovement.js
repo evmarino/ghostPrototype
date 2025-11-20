@@ -150,9 +150,12 @@ function preload() {
   menuBg = loadImage("assets/cemetery_bg.png");
   cityBg = loadImage("assets/city_bg.png");
   uiButtons = loadImage("assets/buttons free.png"); 
+
+  bgMusic = loadSound("assets/bgMusic.mp3");
 }
 
 function setup() {
+  bgMusic.play();
   createCanvas(windowWidth, windowHeight); 
   
   imageMode(CENTER);
