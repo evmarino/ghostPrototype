@@ -328,43 +328,49 @@ function keyPressed() {
       scareSound.play();
     }
 
-    // TODO: loop over npcs if we have multiple for this check, apply to closest npc
-    let rdx = npc.x - ghostX;
-    let rdy = npc.y - ghostY;
+    // Check if NPC is in scare range
+    let distance = dist(ghostX, ghostY, npc.x, npc.y);
+    let scareRange = 150;
+
+    if (distance < scareRange && !npcScared) {
+      // TODO: loop over npcs if we have multiple for this check, apply to closest npc
+      let rdx = npc.x - ghostX;
+      let rdy = npc.y - ghostY;
     
-    let dx = rdx / abs(rdx);
-    let dy = rdy / abs(rdy);
+      let dx = rdx / abs(rdx);
+      let dy = rdy / abs(rdy);
 
-    let dirX;
-    let dirY;
+      let dirX;
+      let dirY;
 
-    switch (npc.dir) {
-      case 0:
-        dirX = 0;
-        dirY = -1;
-        break;
-      case 1:
-        dirX = 1;
-        dirY = 0;
-        break;
-      case 2:
-        dirX = 0;
-        dirY = 1;
-        break;
-      case 3:
-        dirX = -1;
-        dirY = 0;
-        break;
-    }
+      switch (npc.dir) {
+        case 0:
+          dirX = 0;
+          dirY = -1;
+          break;
+        case 1:
+          dirX = 1;
+          dirY = 0;
+          break;
+        case 2:
+          dirX = 0;
+          dirY = 1;
+          break;
+        case 3:
+          dirX = -1;
+          dirY = 0;
+          break;
+      }
 
-    console.log(dx, dy, dirX, dirY);
+      console.log(dx, dy, dirX, dirY);
 
-    if (abs(dx + dirX) == 2 || abs(dy + dirY) == 2) {
-      npcScared = true;
+      if (abs(dx + dirX) == 2 || abs(dy + dirY) == 2) {
+        npcScared = true;
 
-      if (soulsCollected < SOULS_NEEDED) {
-        soulsCollected++;
-        ghostPoints += 4; 
+        if (soulsCollected < SOULS_NEEDED) {
+          soulsCollected++;
+          ghostPoints += 4; 
+        }
       }
     }
   }
