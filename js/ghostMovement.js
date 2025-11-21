@@ -18,9 +18,13 @@ let npcs = [];
 
 // Progress system variables
 let soulsCollected = 0;
-let ghostPoints = 0;
 const SOULS_NEEDED = 5;
 const MAX_GHOST_POINTS = 20;
+
+// Game Timer
+let gameTimer = 60.0;
+const INITIAL_GAME_TIME = 60.0;
+let gameActive = true;
 
 // Key codes
 const KEY_W = 87;
@@ -199,6 +203,7 @@ function draw() {
   drawGhost();
   
   drawProgressUI();
+  updateGameTimer();
 }
 
 function moveGhost() {
@@ -293,27 +298,43 @@ function menuMousePressed() {
 function drawProgressUI() {
   // Soul meter background
   fill(100, 100, 255, 150);
-  rect(20, 20, 200, 20);
+  rect(20, 20, 300, 30);
 
   // Soul meter fill
   fill(0, 0, 255);
-  const soulWidth = map(soulsCollected, 0, SOULS_NEEDED, 0, 200);
-  rect(20, 20, soulWidth, 20);
+  const soulWidth = map(soulsCollected, 0, SOULS_NEEDED, 0, 300);
+  rect(20, 20, soulWidth, 30);
 
-  // Ghost progression meter background
-  fill(100, 255, 100, 150);
-  rect(20, 50, 200, 20);
-
-  // Ghost progression meter fill
-  fill(0, 255, 0);
-  const ghostWidth = map(ghostPoints, 0, MAX_GHOST_POINTS, 0, 200);
-  rect(20, 50, ghostWidth, 20);
+  // Game Timer
+  fill(50, 50, 50, 200);
+  rect(20, 60, 300, 30);
+  fill(255, 0, 0);
+  const timeWidth = map(gameTimer, 0, INITIAL_GAME_TIME, 0, 300);
+  rect(20, 60, timeWidth, 30);
 
   // Labels
   fill(255);
-  textSize(14);
-  text(`Souls: ${soulsCollected}/${SOULS_NEEDED}`, 53, 24);
-  text(`Ghost Points: ${ghostPoints} / ${MAX_GHOST_POINTS}`, 83, 53);
+  textSize(18);
+  text(`Souls: ${soulsCollected}/${SOULS_NEEDED}`, 62, 26);
+  text(`Time: ${int(gameTimer)}s`, 62, 66);
+}
+
+function updateGameTimer() {
+  if (gameActive) {
+    // Count down game timer
+    gameTimer -= deltaTime / 1000.0;
+
+    // Check for game over
+    if (gameTimer <= 0) {
+      gameTimer = 0;
+      gameActive = false;
+    }
+
+    // Check for win condition
+    if (soulsCollected >= SOULS_NEEDED) {
+      gameActive = false;
+    }
+  }
 }
 
 //scare button 
@@ -385,9 +406,10 @@ function keyPressed() {
       if (abs(dx + dirX) == 2 || abs(dy + dirY) == 2) {
         if (soulsCollected < SOULS_NEEDED) {
           soulsCollected++;
-          ghostPoints += 4;
           npcs.splice(target, 1);
         }
+      } else {
+        gameTimer -= 5;
       }
     }
   }
