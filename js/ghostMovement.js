@@ -328,11 +328,13 @@ function updateGameTimer() {
     if (gameTimer <= 0) {
       gameTimer = 0;
       gameActive = false;
+      // TODO: Add game over logic here
     }
 
     // Check for win condition
     if (soulsCollected >= SOULS_NEEDED) {
       gameActive = false;
+      // TODO: Add win logic here
     }
   }
 }
