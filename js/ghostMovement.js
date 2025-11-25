@@ -133,7 +133,7 @@ class NPC {
       case 3:
         img = npcLeft;
         break;
-    }
+    } 
     
     image(img, this.x, this.y);
   }
@@ -154,6 +154,7 @@ function preload() {
   menuBg = loadImage("assets/cemetery_bg.png");
   cityBg = loadImage("assets/city_bg.png");
   uiButtons = loadImage("assets/buttons free.png"); 
+  gameOver = loadImage("assets/gameOver.png");
 
   bgMusic = loadSound("assets/bgMusic.mp3");
 }
@@ -190,6 +191,11 @@ function draw() {
 
   if (GAME_STATE === "INTRO") {
     drawIntroScreen();
+    return;
+  }
+
+  if (GAME_STATE === "END") {
+    drawGameOver();
     return;
   }
 
@@ -329,12 +335,17 @@ function updateGameTimer() {
     if (gameTimer <= 0) {
       gameTimer = 0;
       gameActive = false;
+      GAME_STATE = "END";
+      return;
       // TODO: Add game over logic here
     }
-
+    if (gameActive == false) {
+        image(gameOver)
+      }
     // Check for win condition
     if (soulsCollected >= SOULS_NEEDED) {
       gameActive = false;
+      GAME_STATE = "END";
       // TODO: Add win logic here
     }
   }
@@ -426,4 +437,3 @@ function keyReleased() {
     scareSound.stop();
   }
 }
-
