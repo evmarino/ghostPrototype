@@ -11,6 +11,7 @@ function drawGameOver() {
 
   fill(255);
   textSize(18);
+  text("Press R to Restart", width / 2, height - 40);
 }
 
 

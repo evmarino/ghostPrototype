@@ -32,6 +32,7 @@ const KEY_A = 65;
 const KEY_S = 83;
 const KEY_D = 68;
 const KEY_SPACE = 32;
+const KEY_R = 82;
 
 // sprite offsets
 let stillOffsetX = 0;
@@ -337,11 +338,10 @@ function updateGameTimer() {
       gameActive = false;
       GAME_STATE = "END";
       return;
-      // TODO: Add game over logic here
     }
     if (gameActive == false) {
         image(gameOver)
-      }
+    }
     // Check for win condition
     if (soulsCollected >= SOULS_NEEDED) {
       gameActive = false;
@@ -353,7 +353,14 @@ function updateGameTimer() {
 
 //scare button 
 function keyPressed() {
-    if (GAME_STATE === "INTRO") {
+  if (GAME_STATE === "END") {
+    if (keyCode === 82) { // 'R' to restart
+      restartGame();
+      return;
+    }
+  }
+  
+  if (GAME_STATE === "INTRO") {
     handleIntroKeyPressed();
     return;
   }
@@ -436,4 +443,21 @@ function keyReleased() {
     isScaring = false;
     scareSound.stop();
   }
+}
+
+function restartGame() {
+  gameActive = true;
+  soulsCollected = 0;
+  gameTimer = INITIAL_GAME_TIME;
+  ghostX = width / 2;
+  ghostY = height / 2;
+  isMoving = false;
+  isScaring = false;
+  npcs = [];
+  for (let i = 0; i < 5; i++) {
+    let rx = random(50, width - 50);
+    let ry = random(50, height - 50);
+    npcs.push(new NPC(rx, ry));
+  }
+  GAME_STATE = "GAME";
 }
