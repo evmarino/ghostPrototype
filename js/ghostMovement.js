@@ -316,7 +316,13 @@ function drawProgressUI() {
   // Game Timer
   fill(50, 50, 50, 200);
   rect(20, 60, 300, 30);
-  fill(255, 0, 0);
+
+  if (gameTimer <= 11) {
+    fill(255, 100, 100); // Brighter red
+  } else {
+    fill(255, 0, 0); // Normal red
+  }
+
   const timeWidth = map(gameTimer, 0, INITIAL_GAME_TIME, 0, 300);
   rect(20, 60, timeWidth, 30);
 
