@@ -199,6 +199,10 @@ function draw() {
     drawGameOver();
     return;
   }
+   if (GAME_STATE === "CEMETERY") {
+    drawCemeteryLevel();   
+    return;
+  }
 
   drawBG();
 
@@ -244,11 +248,7 @@ function drawGhost() {
   }
 }
 
-function mousePressed() {
-  if (GAME_STATE === "MENU") {
-    menuMousePressed();
-  }
-}
+
 
 function drawNormalGhost(bob) {
   let img, offX, offY;
@@ -302,6 +302,20 @@ function drawBG() {
 function menuMousePressed() {
   playBtn.click();
 }
+
+function mouseDragged() {
+  if (GAME_STATE === "CEMETERY") {
+    cemeteryMouseDragged();
+  }
+}
+
+function mouseReleased() {
+  if (GAME_STATE === "CEMETERY") {
+    cemeteryMouseReleased();
+  }
+}
+
+
 // Progression meters UI
 function drawProgressUI() {
   // Soul meter background
@@ -335,30 +349,28 @@ function drawProgressUI() {
 
 function updateGameTimer() {
   if (gameActive) {
-    // Count down game timer
+
     gameTimer -= deltaTime / 1000.0;
 
-    // Check for game over
+    // Check for game over (time out)
     if (gameTimer <= 0) {
       gameTimer = 0;
       gameActive = false;
-      GAME_STATE = "END";
+      GAME_STATE = "END";  
       return;
     }
-    if (gameActive == false) {
-        image(gameOver)
-    }
-    // Check for win condition
+
     if (soulsCollected >= SOULS_NEEDED) {
       gameActive = false;
-      GAME_STATE = "END";
-      // TODO: Add win logic here
+      startCemeteryLevel(); 
+      return;
     }
   }
 }
 
 //scare button 
 function keyPressed() {
+
   if (GAME_STATE === "END") {
     if (keyCode === 82) { // 'R' to restart
       restartGame();
@@ -368,6 +380,10 @@ function keyPressed() {
   
   if (GAME_STATE === "INTRO") {
     handleIntroKeyPressed();
+    return;
+  }
+
+  if (GAME_STATE === "CEMETERY") {
     return;
   }
 
@@ -439,6 +455,18 @@ function keyPressed() {
         gameTimer -= 5;
       }
     }
+  }
+}
+
+function mousePressed() {
+  if (GAME_STATE === "MENU") {
+    menuMousePressed();
+    return;
+  }
+
+  if (GAME_STATE === "CEMETERY") {
+    cemeteryMousePressed();  // in cemeteryLevel.js
+    return;
   }
 }
 
