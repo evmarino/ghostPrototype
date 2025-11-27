@@ -26,6 +26,12 @@ let gameTimer = 60.0;
 const INITIAL_GAME_TIME = 60.0;
 let gameActive = true;
 
+// Reminders
+let showSoulReminder = false;
+let soulReminderTimer = 0;
+const SOUL_REMINDER_DURATION = 3.0; // seconds
+let showCountdown = false;
+
 // Key codes
 const KEY_W = 87;
 const KEY_A = 65;
@@ -216,6 +222,9 @@ function draw() {
   
   drawProgressUI();
   updateGameTimer();
+
+  updateSoulReminder();
+  drawCenterNotifications();
 }
 
 function moveGhost() {
@@ -247,8 +256,6 @@ function drawGhost() {
     drawNormalGhost(bob);
   }
 }
-
-
 
 function drawNormalGhost(bob) {
   let img, offX, offY;
@@ -331,12 +338,7 @@ function drawProgressUI() {
   fill(50, 50, 50, 200);
   rect(20, 60, 300, 30);
 
-  if (gameTimer <= 11) {
-    fill(255, 100, 100); // Brighter red
-  } else {
-    fill(255, 0, 0); // Normal red
-  }
-
+  fill(255, 0, 0); // Normal red
   const timeWidth = map(gameTimer, 0, INITIAL_GAME_TIME, 0, 300);
   rect(20, 60, timeWidth, 30);
 
@@ -344,7 +346,40 @@ function drawProgressUI() {
   fill(255);
   textSize(18);
   text(`Souls: ${soulsCollected}/${SOULS_NEEDED}`, 62, 26);
-  text(`Time: ${int(gameTimer)}s`, 62, 66);
+  text(`Time: ${ceil(gameTimer)}s`, 62, 66);
+}
+
+// Show soul collection reminder
+function showSoulCollectionReminder() {
+  showSoulReminder = true;
+  soulReminderTimer = SOUL_REMINDER_DURATION;
+}
+
+function updateSoulReminder() {
+  if (showSoulReminder) {
+    soulReminderTimer -= deltaTime / 1000.0;
+    if (soulReminderTimer <= 0) {
+      showSoulReminder = false;
+    }
+  }
+
+  showCountdown = (gameTimer <= 10 && gameActive);
+}
+
+function drawCenterNotifications() {
+  if (showSoulReminder) {
+    fill(255, 255, 255, 200);
+    textSize(32);
+    text(`SOUL COLLECTED!`, width / 2, height / 2 - 50);
+    textSize(24);
+    text(`${SOULS_NEEDED - soulsCollected} SOULS REMAINING`, width / 2, height / 2);
+  }
+
+  if (showCountdown) {
+    fill(255, 50, 50);
+    textSize(48);
+    text(`${ceil(gameTimer)}`, width / 2, height / 2 - 100);
+  }
 }
 
 function updateGameTimer() {
@@ -450,6 +485,7 @@ function keyPressed() {
         if (soulsCollected < SOULS_NEEDED) {
           soulsCollected++;
           npcs.splice(target, 1);
+          showSoulCollectionReminder();
         }
       } else {
         gameTimer -= 5;
