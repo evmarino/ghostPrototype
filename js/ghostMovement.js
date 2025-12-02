@@ -164,6 +164,7 @@ function preload() {
   gameOver = loadImage("assets/gameOver.png");
 
   bgMusic = loadSound("assets/bgMusic.mp3");
+  spookyFont = loadFont('assets/THE FANTOMS FONT.otf');
 }
 
 
@@ -171,6 +172,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight); 
   
   imageMode(CENTER);
+  textFont(spookyFont);
 
   ghostX = width / 2;
   ghostY = height / 2;
