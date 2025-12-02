@@ -156,7 +156,6 @@ function preload() {
   npcRight = loadImage("assets/npcRight.png");
   npcDown = loadImage("assets/npcDown.png");
   npcLeft = loadImage("assets/npcLeft.png");
-  soul = loadImage("assets/soul.png")
 
   menuBg = loadImage("assets/cemetery_bg.png");
   cityBg = loadImage("assets/city_bg.png");
