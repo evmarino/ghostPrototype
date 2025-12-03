@@ -11,10 +11,28 @@ class CemeteryOrb {
     this.r = 16;
     this.c = c;
     this.collected = false;
+
+    this.dir = random(0, Math.PI);
+    this.speed = 100;
+    this.stateTime = 0;
   }
 
   draw() {
     if (this.collected) return;
+
+    const dt = deltaTime / 1000.0;
+
+    this.dir = 0;
+    this.stateTime -= dt;
+
+    if (this.stateTime <= 0) {
+      this.stateTime = random(0.25, 1);
+      this.dir = Math.min(Math.max(this.dir + random(-0.1, 0.1), 0), Math.PI);
+      this.speed = random(100, 300);
+    }
+
+    this.x = Math.cos(this.dir) * (this.speed * dt);
+    this.y = Math.sin(this.dir) * (this.speed * dt);
 
     noStroke();
     fill(this.c);
