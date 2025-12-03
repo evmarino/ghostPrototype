@@ -169,6 +169,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight); 
+  pixelDensity(1);  
   
   imageMode(CENTER);
   textFont(spookyFont);
@@ -311,11 +312,11 @@ function menuMousePressed() {
   playBtn.click();
 }
 
-function mouseDragged() {
-  if (GAME_STATE === "CEMETERY") {
-    cemeteryMouseDragged();
-  }
-}
+//function mouseDragged() {
+  //if (GAME_STATE === "CEMETERY") {
+  //  cemeteryMouseDragged();
+  //}
+//}
 
 function mouseReleased() {
   if (GAME_STATE === "CEMETERY") {
@@ -504,7 +505,7 @@ function mousePressed() {
   if (GAME_STATE === "CEMETERY") {
     cemeteryMousePressed();  // in cemeteryLevel.js
     return;
-  }
+}
 }
 
 function keyReleased() {
