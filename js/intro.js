@@ -76,7 +76,7 @@ function drawIntroScreen() {
     "  • If they see you first, that target is lost.\n\n" +
     "Souls & Progress:\n" +
     `  • Collect souls in town (Soul Meter up to ${SOULS_NEEDED}).\n` +
-    `  • Earn Ghost Points (Ghost Meter up to ${MAX_GHOST_POINTS}).\n` +
+    `  • You have 60 seconds. If you fail a scare, the timer goes down by 5\n` +
     "  • Release souls at their graves in the cemetery to help them move on.\n" +
     "  • When your Ghost Meter is full, you become a real ghost.\n\n" +
     "Press SPACE or ENTER to begin haunting.";

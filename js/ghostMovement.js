@@ -32,6 +32,11 @@ let soulReminderTimer = 0;
 const SOUL_REMINDER_DURATION = 3.0; // seconds
 let showCountdown = false;
 
+// Screen Flash Variables
+let screenFlash = false;
+let flashTimer = 0;
+const FLASH_DURATION = 1.0; // seconds 
+
 // Key codes
 const KEY_W = 87;
 const KEY_A = 65;
@@ -367,6 +372,12 @@ function updateSoulReminder() {
       showSoulReminder = false;
     }
   }
+  if (screenFlash) {
+    flashTimer -= deltaTime / 1000.0;
+    let flashAlpha = map(flashTimer, 0, FLASH_DURATION, 0, 150);
+    fill(255, 0, 0, flashAlpha);
+    rect(0, 0, width, height);
+  }
 
   showCountdown = (gameTimer <= 10 && gameActive);
 }
@@ -406,6 +417,12 @@ function updateGameTimer() {
       return;
     }
   }
+}
+
+// Flash screen
+function triggerScreenFlash() {
+  screenFlash = true;
+  flashTimer = FLASH_DURATION;
 }
 
 //scare button 
@@ -494,6 +511,7 @@ function keyPressed() {
         }
       } else {
         gameTimer -= 5;
+        triggerScreenFlash();
       }
     }
   }
