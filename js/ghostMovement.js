@@ -52,7 +52,10 @@ const SCARE_FRAME_SIZE  = 32;
 let scareFrameIndex = 0;
 let scareFrameTimer = 0;
 let scareFrameDelay = 4; 
-let scareScale = 10; 
+let scareScale = 10;
+
+const PERSON_HEIGHT = 94 / 2;
+const PERSON_WIDTH = 59 / 2;
 
 class NPC {
   constructor(x, y, speed=100) {
@@ -92,32 +95,32 @@ class NPC {
       case 1:
         switch (this.dir) {
           case 0:
-            if (this.y < 0) {
+            if (this.y - PERSON_HEIGHT < 0) {
               this.stateTime = 0;
               break;
             }
-            this.y -= this.speed * dt;
+            this.y += -this.speed * dt;
             break;
           case 1:
-            if (this.x > width) {
+            if (this.x + PERSON_WIDTH > width) {
               this.stateTime = 0;
               break;
             }
             this.x += this.speed * dt;
             break;
           case 2:
-            if (this.y > height) {
+            if (this.y + PERSON_HEIGHT > height) {
               this.stateTime = 0;
               break;
             }
             this.y += this.speed * dt;
             break;
           case 3:
-            if (this.x < 0) {
+            if (this.x - PERSON_WIDTH < 0) {
               this.stateTime = 0;
               break;
             }
-            this.x -= this.speed * dt;
+            this.x += -this.speed * dt;
             break;
         }
         break;
