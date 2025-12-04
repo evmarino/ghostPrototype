@@ -30,10 +30,57 @@ class CemeteryOrb {
     this.r = 16;
     this.c = c;
     this.collected = false;
+
+    this.dir = random(0, Math.PI);
+    this.targetDir = 0;
+    this.speed = 0;
+    this.stateTime = 0;
   }
 
   draw() {
     if (this.collected) return;
+
+    const dt = deltaTime / 1000.0;
+    this.stateTime -= dt;
+
+    if (this.stateTime <= 0) {
+      this.stateTime = random(2, 5);
+      this.targetDir = (this.dir + random(-Math.PI, Math.PI)) % (2 * Math.PI);
+      this.speed = random(100, 150);
+    }
+
+    const MAX_STEP = 0.02;
+    let diff = ((this.targetDir - this.dir + Math.PI) % (2 * Math.PI)) - Math.PI;
+
+    if (diff > MAX_STEP) diff = MAX_STEP;
+    if (diff < -MAX_STEP) diff = -MAX_STEP;
+
+    this.dir += diff;
+
+    this.x += Math.cos(this.dir) * this.speed * dt;
+    this.y += Math.sin(this.dir) * this.speed * dt;
+
+    if (this.x <= 50) {
+      this.x = 50;
+      this.targetDir = (Math.PI - this.dir) % (2 * Math.PI);
+      this.dir = this.targetDir;
+      this.stateTime = 2;
+    } else if (this.x >= width - 50) {
+      this.x = width - 50;
+      this.targetDir = (Math.PI - this.dir) % (2 * Math.PI);
+      this.dir = this.targetDir;
+      this.stateTime = 2;
+    } else if (this.y <= 50) {
+      this.y = 50;
+      this.targetDir = (-this.dir) % (2 * Math.PI);
+      this.dir = this.targetDir;
+      this.stateTime = 2;
+    } else if (this.y >= height - 50) {
+      this.y = height - 50;
+      this.targetDir = (-this.dir) % (2 * Math.PI);
+      this.dir = this.targetDir;
+      this.stateTime = 2;
+    }
 
     noStroke();
     fill(this.c);
