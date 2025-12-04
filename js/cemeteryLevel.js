@@ -423,16 +423,6 @@ function drawEndScreen() {
   noStroke();
   fill(0, 0, 0, 110);
   rect(0, 0, width, height);
-
-  textAlign(CENTER, CENTER);
-
-  fill(255);
-  textSize(38);
-  text("You Win!", width / 2, height - 80);
-
-  fill(255);
-  textSize(18);
-  text("Press R to Restart", width / 2, height - 40);
 }
 
 
