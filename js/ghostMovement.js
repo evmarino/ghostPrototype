@@ -441,6 +441,13 @@ function triggerScreenFlash() {
 //scare button 
 function keyPressed() {
 
+  if (GAME_STATE === "ENDSCREEN") {
+    if (keyCode === 82) { // 'R' to restart
+      restartGame(); // This already sets GAME_STATE = "GAME"
+      return;
+    }
+  }
+
   if (GAME_STATE === "END") {
     if (keyCode === 82) { // 'R' to restart
       restartGame();
