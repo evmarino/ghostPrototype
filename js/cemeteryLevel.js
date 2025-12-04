@@ -24,10 +24,11 @@ const BW_INTERVAL = 5;   // seconds between flickers
 const BW_DURATION = 3;    // seconds in grayscale
 
 class CemeteryOrb {
-  constructor(x, y, c) {
+  constructor(x, y, img, c) {
     this.x = x;
     this.y = y;
     this.r = 16;
+    this.img = img;
     this.c = c;
     this.collected = false;
 
@@ -82,9 +83,14 @@ class CemeteryOrb {
       this.stateTime = 2;
     }
 
-    noStroke();
-    fill(this.c);
-    circle(this.x, this.y, this.r * 2);
+    imageMode(CENTER);
+    if (cemIsBW) {
+      tint(200);   // grayscale tint
+    } else {
+      noTint();
+    }
+    image(this.img, this.x, this.y, this.r*4, this.r*4);
+    noTint();
 
     fill(255, 240);
     circle(this.x - this.r / 3, this.y - this.r / 3, this.r / 2);
@@ -102,31 +108,23 @@ class CemeteryOrb {
 }
 
 class MatchOrb {
-  constructor(x, y, c) {
+  constructor(x, y, img, c) {
     this.x = x;
     this.y = y;
     this.r = 16;
+    this.img = img;
     this.c = c;
     this.matched = false;
   }
 
+  
   draw() {
     if (this.matched) return;
-
-    noStroke();
-    if (cemIsBW) {
-      fill(200);   //gray out     
-    } else {
-      fill(this.c);    
-    }
-    circle(this.x, this.y, this.r * 2);
-
-    if (cemIsBW) {
-      fill(230);
-    } else {
-      fill(255, 240);
-    }
-    circle(this.x - this.r / 3, this.y - this.r / 3, this.r / 2);
+    
+    imageMode(CENTER);
+    if (cemIsBW) tint(200); else noTint();
+    image(this.img, this.x, this.y, this.r*4, this.r*4);
+    noTint();
   }
 }
 
@@ -161,14 +159,13 @@ function startCemeteryLevel() {
   isScaring = false;
 
 //COLOR LAST NAMES 
-  const colorData = [
-    { label: "Rivera",   col: color( 80, 170, 255) }, // blue
-    { label: "Nguyen",   col: color(255, 230, 100) }, // yellow
-    { label: "Martinez", col: color(120, 220, 140) }, // green
-    { label: "Patel",    col: color(255, 160,  70) }, // orange
-    { label: "Kaur",     col: color(255, 140, 210) }  // pink
-  ];
-
+const colorData = [
+  { label: "Rivera",   col: color( 80, 170, 255), img: blueSoul   }, // blue
+  { label: "Nguyen",   col: color(255, 230, 100), img: yellowSoul }, // yellow
+  { label: "Martinez", col: color(120, 220, 140), img: greenSoul  }, // green
+  { label: "Patel",    col: color(255, 160,  70), img: orangeSoul }, // orange
+  { label: "Kaur",     col: color(255, 140, 210), img: pinkSoul   }  // pink
+];
 
   const startY = height / 2 - 100;
   const nameX  = width * 0.16;
@@ -195,7 +192,7 @@ function startCemeteryLevel() {
     const p = orbPositions[i];
     const x = p.xf * width;
     const y = p.yf * height;
-    cemeteryOrbs.push(new CemeteryOrb(x, y, colorData[i].col));
+    cemeteryOrbs.push(new CemeteryOrb(x, y, colorData[i].img, colorData[i].col)); 
   }
 
   // MATCHinng phase orbs on right, shuffled so colors don't line up with names
@@ -209,7 +206,8 @@ function startCemeteryLevel() {
       new MatchOrb(
         matchStartX,
         matchStartY + i * 40,
-        orbColors[i].col
+        orbColors[i].img,  // the image!
+        orbColors[i].col   // the color
       )
     );
   }
@@ -411,9 +409,30 @@ function cemeteryMouseReleased() {
         col: draggingOrb.c
       });
 
-      // TODO: if (matchesMade === graves.length) -> trigger evil ghost ending
+      if (matchesMade === graves.length) {
+        GAME_STATE = "ENDSCREEN";
+      }
     }
   }
 
   draggingOrb = null;
 }
+
+function drawEndScreen() {
+  image(endScreen, width / 2, height / 2, width, height);
+  noStroke();
+  fill(0, 0, 0, 110);
+  rect(0, 0, width, height);
+
+  textAlign(CENTER, CENTER);
+
+  fill(255);
+  textSize(38);
+  text("You Win!", width / 2, height - 80);
+
+  fill(255);
+  textSize(18);
+  text("Press R to Restart", width / 2, height - 40);
+}
+
+

@@ -169,6 +169,13 @@ function preload() {
   cityBg = loadImage("assets/city_bg.png");
   uiButtons = loadImage("assets/buttons free.png"); 
   gameOver = loadImage("assets/gameOver.png");
+  endScreen = loadImage("assets/endScreen.png");
+
+  blueSoul = loadImage("assets/blueSoul.png");
+  pinkSoul = loadImage("assets/pinkSoul.png");
+  greenSoul = loadImage("assets/greenSoul.png");
+  orangeSoul = loadImage("assets/orangeSoul.png");
+  yellowSoul = loadImage("assets/yellowSoul.png");
 
   bgMusic = loadSound("assets/bgMusic.mp3");
   spookyFont = loadFont('assets/THE FANTOMS FONT.otf');
@@ -215,8 +222,14 @@ function draw() {
     drawGameOver();
     return;
   }
+  
    if (GAME_STATE === "CEMETERY") {
     drawCemeteryLevel();   
+    return;
+  }
+
+  if (GAME_STATE === "ENDSCREEN") {
+    drawEndScreen();
     return;
   }
 
